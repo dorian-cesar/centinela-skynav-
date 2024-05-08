@@ -1,15 +1,17 @@
 <?php
 
-function traer_datos()
-{
 
+
+
+
+  include "login/conexion.php";
+
+  function traer_datos()
+{
   $user = "Centinela";
 
 
   $pasw = "123";
-
-  include "login/conexion.php";
-
   $consulta = "SELECT hash FROM masgps.hash where user='$user' and pasw='$pasw'";
 
   $resutaldo = mysqli_query($mysqli, $consulta);
