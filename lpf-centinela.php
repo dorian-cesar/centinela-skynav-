@@ -8,6 +8,8 @@
 
   function traer_datos()
 {
+ global $mysqli;
+
   $user = "Centinela";
 
 
