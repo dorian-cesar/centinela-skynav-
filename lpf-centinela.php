@@ -187,7 +187,7 @@ function enviar_datos($payrol)
   $curl = curl_init();
 
   curl_setopt_array($curl, array(
-    CURLOPT_URL => 'https://external.skynav.cl/integrador/centinela/test/transmision',
+    CURLOPT_URL => 'https://external.skynav.cl/integrador/centinela/transmision',
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
