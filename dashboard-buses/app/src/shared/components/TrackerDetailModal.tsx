@@ -6,9 +6,15 @@ import { CenteredModal } from "./CenteredModal";
 import { StatusBadge } from "./StatusBadge";
 import { EstateIgnition, EventoEnum } from "@/shared/enums"
 import { getEventoDescripcion } from "@/shared/utils"
-import { BsFiletypeJson } from "react-icons/bs";
 import dayjs from "dayjs";
 import { TrackerJsonViewer } from "@/shared/components/TrackerJsonViewer"
+import dynamic from "next/dynamic";
+
+
+const MapView = dynamic(
+  () => import("@/shared/components/MapView").then((m) => m.MapView),
+  { ssr: false }
+);
 
 interface TrackerDetailModalProps {
   open: boolean;
@@ -66,6 +72,8 @@ export const TrackerDetailModal: FC<TrackerDetailModalProps> = ({
       title={`Detalle del bus ${data.label}`}
     >
       <div className="space-y-4 text-sm text-slate-800">
+        <MapView center={[data.state.gps.location.lat, data.state.gps.location.lng]} zoom={15} height={500} />
+
         <TrackerJsonViewer detail={data} />
 
         <section>
