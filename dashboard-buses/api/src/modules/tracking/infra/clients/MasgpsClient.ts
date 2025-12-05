@@ -26,7 +26,7 @@ export class MasgpsClient implements MasgpsClientPort {
     //Api allTrackerState, retorna http 429
     */
     if (allData) {
-      const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+      /*const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
       const trackers = [];
 
@@ -43,23 +43,10 @@ export class MasgpsClient implements MasgpsClientPort {
         trackers.push({ ...tracker, state });
 
         await sleep(200);
-      }
+      }*/
 
-      return trackers;
-
-      /*const trackers = await Promise.all(
-        response.list.map(async (tracker) => {
-          const state = await this.allTrackerState(hash, tracker.id);
-          return { ...tracker, state };
-        })
-      );
-
-      return trackers;*/
+      return response.list;
     }
-
-    /*if (allData) {
-      return response.list
-    }*/
 
     return response.list.map(item => ({
       id: item.id,

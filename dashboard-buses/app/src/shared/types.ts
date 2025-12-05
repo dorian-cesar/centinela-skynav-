@@ -31,7 +31,7 @@ export interface TrackerDetail {
   id: number;
   label: string;
   user_time: string;
-  source: TrackerItemSource;
+  source?: TrackerItemSource;
   evento?: number;
   fecha_hora?: string;
   motor?: number;

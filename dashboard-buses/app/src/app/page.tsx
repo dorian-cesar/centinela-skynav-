@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 
 import { KpiCard } from "@/shared/components/KpiCard";
 import { TrackersTable } from "@/shared/components/TrackersTable";
@@ -12,7 +12,9 @@ import { RefreshButton } from "@/shared/components/RefreshButton";
 import type { TrackerSummary, TrackerDetail } from "@/shared/types";
 import { TrackerService } from "@/shared/services/trackers/tracker.service";
 import { TrackerItemSource } from '@/shared/services/trackers/types'
-
+import type {
+    ApiTrackerDetailResponse
+} from "../shared/services/trackers/types";
 
 export default function DashboardPage() {
   // -----------------------------
@@ -50,6 +52,68 @@ export default function DashboardPage() {
     loadTrackers();
   }, []);
 
+  const CONCURRENCY = 4;
+
+  const loadedIdsRef = useRef<Set<number>>(new Set());
+  const loadingRef = useRef(false);
+
+  const resetDetailLoading = useCallback(() => {
+    loadedIdsRef.current = new Set();
+    loadingRef.current = false;
+  }, []);
+
+  useEffect(() => {
+    if (!trackers.length) return;
+    if (loadingRef.current) return;
+
+    const queue = trackers.filter((t) => !loadedIdsRef.current.has(t.id));
+    if (!queue.length) return;
+
+    loadingRef.current = true;
+    let cancelled = false;
+
+    const runWorker = async () => {
+      if (cancelled) return;
+
+      const tracker = queue.shift();
+      if (!tracker) return;
+
+      loadedIdsRef.current.add(tracker.id);
+
+      try {
+        const detail = await TrackerService.showDetail(tracker.id, "", true);
+
+        setTrackers((prev) =>
+          prev.map((t) =>
+            t.id === tracker.id
+              ? {
+                  ...t,
+                  state: detail as ApiTrackerDetailResponse,
+                }
+              : t
+          )
+        );
+      } catch (e) {
+        // opcional: marcar error
+      }
+
+      if (queue.length > 0 && !cancelled) {
+        await runWorker();
+      }
+    };
+
+    const workersCount = Math.min(CONCURRENCY, queue.length);
+
+    for (let i = 0; i < workersCount; i++) {
+      runWorker();
+    }
+
+    return () => {
+      cancelled = true;
+      loadingRef.current = false;
+    };
+  }, [trackers, setTrackers]);
+
   // -----------------------------
   // KPI (recomputados automáticamente)
   // -----------------------------
@@ -83,13 +147,14 @@ export default function DashboardPage() {
     setScreenLoading(true);
 
     try {
-      const detailResponse = await TrackerService.showDetail(id, label);
+      const detailResponse = await TrackerService.showDetail(id, label, false);
 
       setDetail({
-        ...detailResponse,
         label,
-        source
-      });
+        source,
+        user_time: detailResponse.user_time,
+        state: detailResponse.state,
+      } as TrackerDetail);
     } finally {
       setLoadingDetail(false);
       setScreenLoading(false);
@@ -171,9 +236,11 @@ export default function DashboardPage() {
             <>
               <RefreshButton
                 loading={loadingList || screenLoading}
-                onClick={() => {
+                onClick={async () => {
+                  resetDetailLoading();
                   setScreenLoading(true);
-                  loadTrackers();
+                  await loadTrackers();
+                  setScreenLoading(false);
                 }}
               />
 

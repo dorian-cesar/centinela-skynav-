@@ -5,11 +5,12 @@ import type { TrackerSummary } from "../types";
 import { BiDetail } from "react-icons/bi";
 import { MdDevices } from "react-icons/md";
 import { StatusBadge } from "./StatusBadge";
+import { mockStateDefault } from "@/shared/mocks"
 
 interface TrackersTableProps {
   data: TrackerSummary[];
   onSelect: (id: number, label: string, source: TrackerSummary["source"] ) => void;
-  onSelectDevice?: (source: TrackerSummary["source"]) => void; // 🔹 nuevo callback opcional
+  onSelectDevice?: (source: TrackerSummary["source"]) => void;
 }
 
 export const TrackersTable: FC<TrackersTableProps> = ({ data, onSelect , onSelectDevice }) => {
@@ -26,6 +27,10 @@ export const TrackersTable: FC<TrackersTableProps> = ({ data, onSelect , onSelec
         </thead>
         <tbody>
           {data.map((tracker) => {
+            if( typeof tracker.state === "undefined" ){
+              tracker = {...tracker, state: mockStateDefault}
+            }
+
             const connectionStatus = tracker.state?.state.connection_status === "active" ? "active" : "inactive"
 
             return (

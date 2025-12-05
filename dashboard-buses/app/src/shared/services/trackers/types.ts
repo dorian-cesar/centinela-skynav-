@@ -17,7 +17,6 @@ export interface ApiTrackerListItemResponse {
     source: TrackerItemSource;
     tag_bindings: any[];
     clone: boolean;
-    
 }
 
 export interface ApiTrackerDetailState {
@@ -36,7 +35,9 @@ export interface ApiTrackerDetailState {
     ignition: boolean;
     ignition_update: string;
     inputs: boolean[];
+    inputs_update?: string;
     outputs: boolean[];
+    outputs_update?: string;
     last_update: string;
     gsm: {
         updated: string;

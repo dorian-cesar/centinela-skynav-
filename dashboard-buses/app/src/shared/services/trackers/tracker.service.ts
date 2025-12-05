@@ -12,11 +12,11 @@ export const TrackerService = {
         return res.data.map((item) => mapTrackerItem(item));
     },
 
-    async showDetail(id: number, label: string) {
+    async showDetail(id: number, label: string, allData: boolean = false) {
         const res = await httpClient.get<ApiTrackerDetailResponse>(
             `/show_tracker/${id}`
         );
 
-        return mapTrackerDetail(id, res.data, label);
+        return mapTrackerDetail(id, res.data, label , allData);
     },
 };

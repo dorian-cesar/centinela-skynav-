@@ -19,8 +19,13 @@ export function mapTrackerItem(item: any): TrackerSummary {
 export function mapTrackerDetail(
     id: number,
     api: ApiTrackerDetailResponse,
-    label: string
-): TrackerDetail {
+    label: string,
+    allData: boolean = false
+): TrackerDetail | ApiTrackerDetailResponse {
+    if( allData ){
+        return api
+    }
+
     return {
         id,
         label,
