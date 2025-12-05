@@ -1,0 +1,263 @@
+{
+	"info": {
+		"_postman_id": "92b922f5-8d9a-4809-9e00-0ba5cfd19a0a",
+		"name": "centinela-skynav",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18842328"
+	},
+	"item": [
+		{
+			"name": "API",
+			"item": [
+				{
+					"name": "MASGPS_TRACKER_LIST_URL",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Origin",
+								"value": "http://www.trackermasgps.com",
+								"type": "text"
+							},
+							{
+								"key": "Referer",
+								"value": "http://www.trackermasgps.com/",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json, text/plain, */*",
+								"type": "text"
+							},
+							{
+								"key": "Accept-Language",
+								"value": "es-419,es;q=0.9,en;q=0.8",
+								"type": "text"
+							},
+							{
+								"key": "Connection",
+								"value": "keep-alive",
+								"type": "text"
+							},
+							{
+								"key": "Cookie",
+								"value": "_ga=GA1.2.728367267.1665672802; locale=es; _gid=GA1.2.967319985.1673009696; _gat=1; session_key=5d7875e2bf96b5966225688ddea8f098",
+								"type": "text"
+							},
+							{
+								"key": "User-Agent",
+								"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://www.trackermasgps.com/api-v2/tracker/list?hash=1f979d275fdae0a856f0f3281c3b55ea",
+							"protocol": "http",
+							"host": [
+								"www",
+								"trackermasgps",
+								"com"
+							],
+							"path": [
+								"api-v2",
+								"tracker",
+								"list"
+							],
+							"query": [
+								{
+									"key": "hash",
+									"value": "1f979d275fdae0a856f0f3281c3b55ea"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ShowTrackerUseCase",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_API}}/show_tracker/:id_tracker",
+							"host": [
+								"{{URL_API}}"
+							],
+							"path": [
+								"show_tracker",
+								":id_tracker"
+							],
+							"variable": [
+								{
+									"key": "id_tracker",
+									"value": "10185765"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SyncTrackersUseCase",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL_API}}/sync",
+							"host": [
+								"{{URL_API}}"
+							],
+							"path": [
+								"sync"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "TrackersListUseCase",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_API}}/tracker_list",
+							"host": [
+								"{{URL_API}}"
+							],
+							"path": [
+								"tracker_list"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MASGPS_GET_STATE_URL",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://www.trackermasgps.com/api-v2/tracker/get_state?hash=1f979d275fdae0a856f0f3281c3b55ea&tracker_id=10185765",
+					"protocol": "http",
+					"host": [
+						"www",
+						"trackermasgps",
+						"com"
+					],
+					"path": [
+						"api-v2",
+						"tracker",
+						"get_state"
+					],
+					"query": [
+						{
+							"key": "hash",
+							"value": "1f979d275fdae0a856f0f3281c3b55ea"
+						},
+						{
+							"key": "tracker_id",
+							"value": "10185765"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MASGPS_TRACKER_LIST_URL",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Origin",
+						"value": "http://www.trackermasgps.com",
+						"type": "text"
+					},
+					{
+						"key": "Referer",
+						"value": "http://www.trackermasgps.com/",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json, text/plain, */*",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "es-419,es;q=0.9,en;q=0.8",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive",
+						"type": "text"
+					},
+					{
+						"key": "Cookie",
+						"value": "_ga=GA1.2.728367267.1665672802; locale=es; _gid=GA1.2.967319985.1673009696; _gat=1; session_key=5d7875e2bf96b5966225688ddea8f098",
+						"type": "text"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://www.trackermasgps.com/api-v2/tracker/list?hash=1f979d275fdae0a856f0f3281c3b55ea",
+					"protocol": "http",
+					"host": [
+						"www",
+						"trackermasgps",
+						"com"
+					],
+					"path": [
+						"api-v2",
+						"tracker",
+						"list"
+					],
+					"query": [
+						{
+							"key": "hash",
+							"value": "1f979d275fdae0a856f0f3281c3b55ea"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL_API",
+			"value": ""
+		}
+	]
+}

@@ -1,0 +1,59 @@
+"use client";
+
+/**
+ * Para la integracion de google maps se requiere de obtener API_KEY_AQUI
+ * 
+ * NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=TU_API_KEY_AQUI
+ * 
+ * depende de: npm install -D @types/google.maps
+ */
+import { useEffect, useRef } from "react";
+
+interface GoogleMapProps {
+  lat: number;
+  lng: number;
+  zoom?: number;
+}
+
+export const GoogleMap = ({ lat, lng, zoom = 15 }: GoogleMapProps) => {
+  const mapRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    // Ya existe script? No volver a cargarlo
+    if (document.getElementById("google-maps-script")) {
+      initMap();
+      return;
+    }
+
+    // Crear script para Google Maps
+    const script = document.createElement("script");
+    script.id = "google-maps-script";
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`;
+    script.async = true;
+    script.defer = true;
+    script.onload = initMap;
+
+    document.body.appendChild(script);
+  }, [lat, lng]);
+
+  function initMap() {
+    if (!mapRef.current) return;
+
+    new google.maps.Map(mapRef.current, {
+      center: { lat, lng },
+      zoom,
+      disableDefaultUI: false,
+    });
+
+    new google.maps.Marker({
+      position: { lat, lng },
+      map: new google.maps.Map(mapRef.current),
+    });
+  }
+
+  return (
+    <div className="w-full h-64 rounded-lg border border-slate-300 shadow-sm">
+      <div ref={mapRef} className="w-full h-full" />
+    </div>
+  );
+};

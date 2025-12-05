@@ -1,19 +1,34 @@
 <?php
+  // Cargar variables de entorno
+  require_once __DIR__ . '/env.php';
 
+  // Incluir la conexión (que ya usa .env)
+  include __DIR__ . '/login/conexion.php';
 
+  // Credenciales de usuario desde .env
+  $user = getenv('CENTINELA_USER')     ?: '';
+  $pasw = getenv('CENTINELA_PASSWORD') ?: '';
 
+  // URLs y claves de servicios desde .env
+  $servicesUrl = array(
+    'tracker_list' => array(
+      'url'         => getenv('MASGPS_TRACKER_LIST_URL')          ?: '',
+      'session_key' => getenv('MASGPS_TRACKER_LIST_SESSION_KEY')  ?: '',
+      'origin'      => getenv('MASGPS_TRACKER_LIST_ORIGIN')       ?: '',
+    ),
+    'tracker_get_state' => getenv('MASGPS_TRACKER_GET_STATE_URL') ?: '',
+    'centinela_transmision' => array(
+      'url'    => getenv('CENTINELA_TRANSMISION_URL')    ?: '',
+      'bearer' => getenv('CENTINELA_TRANSMISION_BEARER') ?: '',
+    ),
+  );
+  
+function traer_datos(){
+  global $mysqli; 
+  global $user;
+  global $pasw;
+  global $servicesUrl;
 
-
-  include "login/conexion.php";
-
-  function traer_datos()
-{
- global $mysqli;
-
-  $user = "Centinela";
-
-
-  $pasw = "123";
   $consulta = "SELECT hash FROM masgps.hash where user='$user' and pasw='$pasw'";
 
   $resutaldo = mysqli_query($mysqli, $consulta);
@@ -31,7 +46,7 @@
   $curl = curl_init();
 
   curl_setopt_array($curl, array(
-    CURLOPT_URL => 'http://www.trackermasgps.com/api-v2/tracker/list',
+    CURLOPT_URL => $servicesUrl['tracker_list']['url'],
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
@@ -45,9 +60,9 @@
       'Accept-Language: es-419,es;q=0.9,en;q=0.8',
       'Connection: keep-alive',
       'Content-Type: application/json',
-      'Cookie: _ga=GA1.2.728367267.1665672802; locale=es; _gid=GA1.2.967319985.1673009696; _gat=1; session_key=5d7875e2bf96b5966225688ddea8f098',
-      'Origin: http://www.trackermasgps.com',
-      'Referer: http://www.trackermasgps.com/',
+      'Cookie: _ga=GA1.2.728367267.1665672802; locale=es; _gid=GA1.2.967319985.1673009696; _gat=1; session_key='.$servicesUrl['tracker_list']['session_key'],
+      'Origin: '.$servicesUrl['tracker_list']['origin'],
+      'Referer: '.$servicesUrl['tracker_list']['origin'].'/',
       'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
     ),
   ));
@@ -71,7 +86,7 @@
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-      CURLOPT_URL => 'http://www.trackermasgps.com/api-v2/tracker/get_state',
+      CURLOPT_URL => $servicesUrl['tracker_get_state'],
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_ENCODING => '',
       CURLOPT_MAXREDIRS => 10,
@@ -148,25 +163,19 @@
           */
 
     $json = array(
-
       'patente' => $patente,
       'imei' => $imei,
-
       'latitud' => $lat,
       'longitud' => $lng,
       'altitud' => $alt,
       'evento' => $evento,
-
       'velocidad' => $speed,
       'heading' => $direccion,
       'fechaHora' => $ultima_Conexion,
-
       //'connection_status' => $connection_status,
       //'signal_level' => $signal_level,
       //'movement_status' => $movement_status,
       'ignicion' => $motor,
-
-
     );
 
     $total[$i] = $json;
@@ -184,10 +193,12 @@
 
 function enviar_datos($payrol)
 {
+  global $servicesUrl;
+
   $curl = curl_init();
 
   curl_setopt_array($curl, array(
-    CURLOPT_URL => 'https://external.skynav.cl/integrador/centinela/transmision',
+    CURLOPT_URL => $servicesUrl['centinela_transmision']['url'],
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
@@ -197,7 +208,7 @@ function enviar_datos($payrol)
     CURLOPT_CUSTOMREQUEST => 'POST',
     CURLOPT_POSTFIELDS => $payrol,
     CURLOPT_HTTPHEADER => array(
-      'Authorization: Bearer d96adbd0b5066c73ccce0cfaa2990fe957d183d66014ef5b61f86bfe3d94971738731463c56caf1f2cdf0636ed505e8f72444922f72e3c6e47ff98a23cf0185b',
+      'Authorization: Bearer '.$servicesUrl['centinela_transmision']['bearer'],
       'Content-Type: application/json'
     ),
   ));

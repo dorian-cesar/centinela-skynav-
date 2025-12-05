@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  centinela:
+    build: .
+    container_name: lpf-centinela
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    restart: unless-stopped

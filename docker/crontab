@@ -1,0 +1,2 @@
+# Ejecutar cada minuto el script PHP
+* * * * * root /usr/local/bin/php /var/www/html/lpf-centinela.php >> /var/log/cron.log 2>&1
