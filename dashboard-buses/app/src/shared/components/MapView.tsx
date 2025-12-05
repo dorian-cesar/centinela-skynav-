@@ -1,10 +1,10 @@
 "use client";
 
-import { MapContainer, TileLayer /* , Marker, Popup */ } from "react-leaflet";
-//import L, { DivIcon } from "leaflet";
+import { MapContainer, TileLayer  , Marker, Popup  } from "react-leaflet";
+import L, { DivIcon } from "leaflet";
 import type { LatLngExpression } from "leaflet";
-//import { renderToString } from "react-dom/server";
-//import { FaBus } from "react-icons/fa";
+import { renderToString } from "react-dom/server";
+import { FaBus } from "react-icons/fa";
 import "leaflet/dist/leaflet.css";
 
 type MapViewProps = {
@@ -13,13 +13,13 @@ type MapViewProps = {
     height?: number | string;
 };
 
-/*const busIcon: DivIcon = L.divIcon({
+const busIcon: DivIcon = L.divIcon({
     html: renderToString(<FaBus size={20} />),
     className: "custom-bus-icon leaflet-div-icon",
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32],
-});*/
+});
 
 export function MapView({
     center,
@@ -43,11 +43,11 @@ export function MapView({
                 maxZoom={19}
             />
 
-            {/*}<Marker position={center} icon={busIcon}>
+            <Marker position={center} icon={busIcon}>
                 <Popup>
                 <strong>Bus / tracker aquí</strong>
                 </Popup>
-            </Marker>{*/}
+            </Marker>
         </MapContainer>
     );
 }
